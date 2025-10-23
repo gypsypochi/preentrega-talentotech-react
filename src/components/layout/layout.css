@@ -1,0 +1,192 @@
+/* =======================================================
+   LAYOUT (Sidebar + Contenido)
+   Usa solo variables de :root
+   ======================================================= */
+
+/* (opcional, asegura que el body no scrollee) */
+html, body { height: 100%; overflow: hidden; }
+
+/* ---------- Shell ---------- */
+.app-shell{
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  height: 100vh;                 /* ⬅️ fijo: sidebar no se mueve */
+  background: var(--color-secundario);
+  overflow: hidden;              /* corta scroll del documento */
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  height: 100%;
+  background: var(--color-azul);
+  color: var(--color-blanco);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px;
+  box-sizing: border-box;
+}
+
+.sidebar .brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar .brand img{ width: 38px; height: 38px; object-fit: contain; }
+.sidebar .brand h1{ font-size: 17px; line-height: 1.1; font-weight: 700; margin: 0; }
+
+/* Navegación */
+.sidebar nav{ display: grid; gap: 10px; }
+
+.sidebar a,
+.side-link{
+  background: transparent;
+  border: none;
+  text-align: left;
+  color: var(--color-blanco);
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  display: block;
+  text-decoration: none;
+  transition: background .2s, box-shadow .2s, color .2s, transform .02s;
+}
+.sidebar a:hover,
+.side-link:hover{
+  background: var(--color-azul-claro);
+  color: var(--color-blanco);
+}
+.sidebar a:focus-visible,
+.side-link:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-acento-rosa);
+}
+/* Activo para links normales (Inicio, Productos, Reseñas) */
+.sidebar a.active,
+.side-link.active{
+  background: var(--color-azul-claro);
+  color: var(--color-blanco);
+  box-shadow: none;
+}
+/* Solo el carrito mantiene estilo destacado */
+.sidebar .cart-link.active{
+  background: var(--color-blanco);
+  color: var(--color-azul);
+  box-shadow: 0 0 0 2px var(--color-acento-rosa);
+}
+
+/* Badge genérico */
+.badge{
+  background: var(--color-blanco);
+  color: var(--color-azul);
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+/* Pie de sidebar */
+.sidebar .mini-footer{
+  margin-top: auto;
+  font-size: 12px;
+  opacity: .85;
+}
+
+/* Logo como link */
+.brand-link{ display: inline-block; }
+
+/* ---------- Contenido principal ---------- */
+.main{
+  padding: 28px 32px;
+  height: 100vh;                 /* ⬅️ scroll solo aquí */
+  overflow-y: auto;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.main .page-title{
+  font-size: 2rem;
+  margin: 0 0 18px;
+  color: var(--color-azul);
+  letter-spacing: .2px;
+}
+.main .content-card{
+  background: var(--color-blanco);
+  border: 2px solid var(--color-azul-claro);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+/* =======================================================
+   Carrito destacado en la sidebar
+   ======================================================= */
+
+/* Botón Carrito (NavLink) */
+.sidebar .cart-link{
+  position: relative;
+  display: flex !important;      /* asegura ganar sobre .side-link */
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 12px 56px 12px 14px;  /* espacio para el badge a la derecha */
+  background: var(--color-blanco);
+  color: var(--color-azul);
+  box-shadow: 0 0 0 2px var(--color-acento-rosa);
+  font-weight: 800;
+}
+.sidebar .cart-link:hover{
+  background: var(--color-acento-rosa);
+  color: var(--color-blanco);
+  box-shadow: 0 0 0 2px var(--color-primario);
+}
+.sidebar .cart-link:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-acento-rosa-hover);
+}
+
+/* Texto + emoji dentro del botón */
+.sidebar .cart-label{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.sidebar .cart-emoji{
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  background: var(--color-acento-rosa);
+  color: var(--color-blanco);
+  font-size: 14px;
+}
+
+/* Badge de cantidad fijo a la derecha del botón */
+.sidebar .badge-cart{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  min-width: 28px;
+  text-align: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  box-shadow: 0 2px 0 var(--color-acento-rosa-hover);
+}
+
+/* =======================================================
+   Responsive tweaks
+   ======================================================= */
+@media (max-width: 900px){
+  .app-shell{ grid-template-columns: 230px 1fr; }
+}
+@media (max-width: 680px){
+  .app-shell{ grid-template-columns: 210px 1fr; }
+  .main{ padding: 22px 20px; }
+}
+@media (max-width: 560px){
+  .app-shell{ grid-template-columns: 200px 1fr; }
+  .main{ padding: 18px 16px; }
+}

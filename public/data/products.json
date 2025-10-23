@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "title": "Stickers Kawaii",
+    "price": 120,
+    "image": "/assets/producto1.jpg",
+    "category": "kawaii",
+    "tags": ["pastel", "caritas", "tiernos"],
+    "description": "Pack de stickers kawaii con caritas tiernas y colores pastel. Ideales para decorar cuadernos, agendas y diarios creativos."
+  },
+  {
+    "id": 2,
+    "title": "Stickers para Termos",
+    "price": 110,
+    "image": "/assets/producto2.jpg",
+    "category": "termos",
+    "tags": ["resistentes", "agua", "divertidos"],
+    "description": "Stickers resistentes al agua, perfectos para personalizar termos, botellas y tazas."
+  },
+  {
+    "id": 3,
+    "title": "Stickers Florales",
+    "price": 130,
+    "image": "/assets/producto3.jpg",
+    "category": "florales",
+    "tags": ["flores", "naturaleza", "colores vivos"],
+    "description": "Diseños inspirados en flores, frutas y naturaleza para darle un toque fresco a tus objetos."
+  },
+  {
+    "id": 4,
+    "title": "Retro Pack",
+    "price": 100,
+    "image": "/assets/producto4.jpg",
+    "category": "retro",
+    "tags": ["vintage", "nostalgia", "colección"],
+    "description": "Colección de stickers retro y vintage con colores nostálgicos para los amantes del estilo clásico."
+  },
+  {
+    "id": 5,
+    "title": "Pack Pop",
+    "price": 140,
+    "image": "/assets/producto5.jpg",
+    "category": "pop",
+    "tags": ["llamativo", "colores", "diversión"],
+    "description": "Stickers pop con colores brillantes y diseños llamativos. Perfectos para destacar en cualquier superficie."
+  },
+  {
+    "id": 6,
+    "title": "Viajeros Stickers",
+    "price": 110,
+    "image": "/assets/producto6.jpg",
+    "category": "viajes",
+    "tags": ["aventura", "mochila", "valija"],
+    "description": "Stickers viajeros para decorar mochilas, valijas y diarios de viaje. ¡Acompañá tus aventuras con estilo!"
+  },
+  {
+    "id": 7,
+    "title": "Stickers Cute",
+    "price": 115,
+    "image": "/assets/producto7.jpg",
+    "category": "cute",
+    "tags": ["tiernos", "adorables", "bullet journal"],
+    "description": "Stickers súper cute para bullet journals, agendas o simplemente para regalar."
+  },
+  {
+    "id": 8,
+    "title": "Animalitos Adorables",
+    "price": 120,
+    "image": "/assets/producto8.jpg",
+    "category": "animales",
+    "tags": ["kawaii", "animalitos", "coloridos"],
+    "description": "Pack de animalitos kawaii en fondos coloridos. Ideales para quienes aman lo tierno."
+  },
+  {
+    "id": 9,
+    "title": "Gamer Pack",
+    "price": 130,
+    "image": "/assets/producto9.jpg",
+    "category": "gamer",
+    "tags": ["videojuegos", "robots", "digital"],
+    "description": "Stickers con temática gamer, robots y personajes digitales. Perfectos para consolas, notebooks y más."
+  },
+  {
+    "id": 10,
+    "title": "Ositos Pastel",
+    "price": 125,
+    "image": "/assets/producto10.jpg",
+    "category": "osos",
+    "tags": ["pastel", "suaves", "adorables"],
+    "description": "Pack de ositos en tonos pastel, súper suaves y adorables. Ideales para agendas o decoración kawaii."
+  }
+]

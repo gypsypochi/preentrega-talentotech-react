@@ -1,0 +1,112 @@
+/* ===== Grid general de la Home ===== */
+.home{ 
+  display: grid; 
+  gap: 18px; 
+}
+
+/* ===== Hero con logo y descripción ===== */
+.home-hero{
+  background: var(--color-blanco);
+  border: 2px solid var(--color-azul-claro);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,.05);
+}
+.home-logo{
+  width: 300px;
+  height: auto;
+  margin: 8px auto 12px;
+}
+.home-intro{
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: var(--color-texto);
+}
+
+/* ===== Sobre mí (mini-portfolio: foto + texto + redes) ===== */
+.home-about{
+  background: var(--color-blanco);
+  border: 2px solid var(--color-azul-claro);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.05);
+}
+.home-about h3{
+  margin: 0 0 12px;
+  color: var(--color-azul);
+}
+
+/* Contenido interno: foto + columna de texto */
+.about-content{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Foto de perfil */
+.about-photo{
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--color-primario);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+/* Texto + redes */
+.about-text{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--color-texto);
+}
+
+/* Botones de redes dentro del mismo bloque */
+.about-social{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.about-social .btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;                 /* espacio entre icono y texto */
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-blanco);
+  border: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  transition: filter .15s ease, transform .05s ease;
+  font-size: 15px;
+}
+
+.about-social .btn img{ width: 20px; height: 20px; }
+
+.btn-instagram{ background: var(--color-primario); }
+.btn-whatsapp{  background: var(--color-verde); }
+
+.about-social .btn:hover{ filter: brightness(1.05); }
+.about-social .btn:active{ transform: translateY(1px); }
+
+/* ===== Responsive ===== */
+@media (max-width: 680px){
+  .about-content{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .about-photo{
+    width: 120px;
+    height: 120px;
+  }
+  .about-social{
+    justify-content: center;
+  }
+}

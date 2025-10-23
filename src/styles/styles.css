@@ -1,0 +1,50 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+
+:root{
+  --color-primario: #ff6f91;
+  --color-secundario: #e0f7fa;
+  --color-acento-rosa: #f6c1ec;
+  --color-acento-rosa-hover: #ffc4eb;
+  --color-azul: #0288d1;
+  --color-azul-claro: #81d4fa;
+  --color-verde-oscuro: #006d77;
+  --color-verde: #00c2cb;
+  --color-verde-brillante: #00eaff;
+  --color-texto: #333;
+  --color-blanco: #fff;
+  --color-footer: #222;
+}
+body {
+  font-family: 'Fredoka', sans-serif;
+  background-color: var(--color-secundario);
+  color: var(--color-texto);
+  margin: 0;
+  padding: 0;
+}
+
+/* 1) Box-sizing global (ayuda a que todo mida bien) */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* 2) Tamaños base + títulos más compactos */
+html { font-size: 16px; }         /* base accesible */
+body { line-height: 1.5; }
+h1 { font-size: 1.8rem; margin: 0 0 .75rem; }
+h2 { font-size: 1.4rem; margin: 0 0 .75rem; color: #1f336d; }
+h3 { font-size: 1.1rem; margin: 0 0 .5rem; }
+
+/* 3) Imágenes y enlaces por defecto */
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--color-azul); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* 4) Inputs y botones (estándar sobrio) */
+input, select, textarea, button {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
