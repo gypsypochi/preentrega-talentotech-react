@@ -1,16 +1,43 @@
-# React + Vite
+# 🛒 Pre-Entrega React JS - Talento Tech
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto de e-commerce de Sticker Therapy, desarrollado en React + Vite como pre-entrega  
+Autora: Micaela Natalia Luaces.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tecnologías utilizadas
+- React + Vite  
+- React Router DOM  
+- Hooks (`useState`, `useEffect`, `useMemo`, `useContext`)  
+- Context API para manejo global del carrito  
+- CSS3 y HTML5  
+- Persistencia en LocalStorage  
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✅ Requerimientos cumplidos
 
-## Expanding the ESLint configuration
+### Requerimiento #1: Carrito de compras
+- Listado de productos con botón **“Agregar al carrito”**  
+- Estado global del carrito con Context API  
+- Página `/carrito` con productos, cantidades y total  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Requerimiento #2: API de productos
+- Conexión a **`/data/products.json`** (simulación de API)  
+- Manejo de estado de carga (`loading`) y errores  
+- Actualización del diseño y carrito ampliado  
+
+### Requerimiento #3: Rutas
+- Implementación de rutas con React Router  
+- Secciones: Inicio `/`, Productos `/productos`, Reseñas `/reseñas`, Carrito `/carrito`  
+- Manejo de carga y errores en vistas  
+
+### Requerimiento #4: Rutas dinámicas y protegidas
+- Ruta dinámica `/producto/:id` para ver el detalle  
+- Ruta protegida `/checkout`, accesible solo si hay productos en el carrito  
+
+---
+
+Deploy
+El proyecto está desplegado en Vercel:  
+👉 https://preentrega-talentotech-react.vercel.app/
