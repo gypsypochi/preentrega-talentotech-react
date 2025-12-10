@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 
 import { CartProvider } from "./components/cart/cartcontext.jsx";
+import { AuthProvider } from "./components/auth/authcontext.jsx"; // 👈 NUEVO
 
 import "./styles/styles.css";
 import "./components/layout/layout.css";
@@ -11,9 +12,11 @@ import "./components/layout/layout.css";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <CartProvider>
-        <App />
-      </CartProvider>
+      <AuthProvider>           {/* ⬅ ahora toda la app tiene AuthContext */}
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );

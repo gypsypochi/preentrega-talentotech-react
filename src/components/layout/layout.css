@@ -177,6 +177,63 @@ html, body { height: 100%; overflow: hidden; }
 }
 
 /* =======================================================
+   Bloque de autenticación (login / logout) en la sidebar
+   ======================================================= */
+
+/* Bloque de autenticación colocado abajo */
+.auth-block {
+  margin-top: auto;       /* 👈 empuja este bloque al fondo de la sidebar */
+  padding: 16px 1rem;
+  border-top: 1px dashed rgba(255,255,255,0.3);
+}
+
+
+.auth-greeting{
+  color: var(--color-blanco);
+  font-size: 0.9rem;
+  margin: 0 0 8px;
+}
+
+.auth-button{
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s, color .2s, box-shadow .2s, transform .02s;
+}
+
+/* Botón cuando NO está logueada (login) */
+.auth-button--login{
+  background: var(--color-blanco);
+  color: var(--color-azul);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+}
+.auth-button--login:hover{
+  background: var(--color-acento-rosa);
+  color: var(--color-blanco);
+}
+
+/* Botón cuando SÍ está logueada (logout) */
+.auth-button--logout{
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  box-shadow: 0 2px 0 var(--color-acento-rosa-hover);
+}
+.auth-button--logout:hover{
+  background: #ff4f7d;
+}
+
+/* Accesibilidad */
+.auth-button:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-acento-rosa-hover);
+}
+
+
+/* =======================================================
    Responsive tweaks
    ======================================================= */
 @media (max-width: 900px){

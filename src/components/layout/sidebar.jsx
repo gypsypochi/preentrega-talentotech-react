@@ -1,9 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./layout.css";
 import { useCart } from "../cart/cartcontext.jsx";
+import { useAuth } from "../auth/authcontext.jsx";
 
 export default function Sidebar() {
   const { cartCount } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLoginClick() {
+    navigate("/login");
+  }
+
+  function handleLogoutClick() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <aside className="sidebar">
@@ -15,25 +27,78 @@ export default function Sidebar() {
       </div>
 
       <nav>
-        <NavLink to="/" end className={({isActive}) => "side-link" + (isActive ? " active" : "")}>Inicio</NavLink>
-        <NavLink to="/productos" className={({isActive}) => "side-link" + (isActive ? " active" : "")}>Productos</NavLink>
-        <NavLink to="/reseñas" className={({isActive}) => "side-link" + (isActive ? " active" : "")}>Reseñas</NavLink>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            "side-link" + (isActive ? " active" : "")
+          }
+        >
+          Inicio
+        </NavLink>
+
+        <NavLink
+          to="/productos"
+          className={({ isActive }) =>
+            "side-link" + (isActive ? " active" : "")
+          }
+        >
+          Productos
+        </NavLink>
+
+        <NavLink
+          to="/reseñas"
+          className={({ isActive }) =>
+            "side-link" + (isActive ? " active" : "")
+          }
+        >
+          Reseñas
+        </NavLink>
 
         {/* Carrito visible con badge grande */}
-<NavLink
-  to="/carrito"
-  className={({isActive}) => "side-link cart-link" + (isActive ? " active" : "")}
->
-  <span className="cart-label">
-    <span className="cart-emoji" aria-hidden>🛒</span>
-    <span>Carrito</span>
-  </span>
-  <span className="badge badge-cart">{cartCount}</span>
-</NavLink>
-
+        <NavLink
+          to="/carrito"
+          className={({ isActive }) =>
+            "side-link cart-link" + (isActive ? " active" : "")
+          }
+        >
+          <span className="cart-label">
+            <span className="cart-emoji" aria-hidden>
+              🛒
+            </span>
+            <span>Carrito</span>
+          </span>
+          <span className="badge badge-cart">{cartCount}</span>
+        </NavLink>
       </nav>
 
-      {/* Pie simple (sacamos el contador duplicado) */}
+      {/* Bloque Login / Logout */}
+      <div className="auth-block">
+        {isAuthenticated ? (
+          <>
+            <p className="auth-greeting">
+              👋 Hola <strong>{user.username}</strong>
+            </p>
+            <button
+              type="button"
+              className="auth-button auth-button--logout"
+              onClick={handleLogoutClick}
+            >
+              Cerrar sesión
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            className="auth-button auth-button--login"
+            onClick={handleLoginClick}
+          >
+            🔐 Iniciar sesión
+          </button>
+        )}
+      </div>
+
+      {/* Pie simple */}
       <div className="mini-footer">
         © 2025 Tienda. Todos los derechos reservados.
       </div>
