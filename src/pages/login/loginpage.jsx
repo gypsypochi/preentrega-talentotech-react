@@ -1,46 +1,86 @@
-// src/pages/login/loginpage.jsx
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../components/auth/authcontext.jsx"; // ← RUTA CORRECTA
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/auth/authcontext.jsx";
 
-function LoginPage() {
-  const [username, setUsername] = useState("");
+export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const from = location.state?.from?.pathname || "/";
 
   function handleSubmit(e) {
     e.preventDefault();
+    setError("");
 
-    if (!username.trim()) {
-      alert("Por favor ingresá un nombre de usuario");
+    const name = username.trim();
+    if (!name) {
+      setError("Ingresá un nombre de usuario.");
       return;
     }
 
-    login(username.trim());
-    navigate("/");
+    // 👑 modo admin: usuario "admin" + pass "1234"
+    if (name.toLowerCase() === "admin") {
+      if (password !== "1234") {
+        setError("Contraseña de admin incorrecta. (Pista: 1234 😉)");
+        return;
+      }
+      login(name, true); // admin
+    } else {
+      // usuario normal, la contraseña no importa
+      login(name, false);
+    }
+
+    navigate(from, { replace: true });
   }
 
   return (
-    <section style={{ padding: "2rem" }}>
-      <h1>Iniciar sesión</h1>
-      <p>Para acceder al carrito y al checkout, iniciá sesión.</p>
+    <section style={{ maxWidth: 480 }}>
+      <h2>Iniciar sesión</h2>
+      <p>
+        Si ingresás como <strong>admin</strong>, vas a ver el panel para administrar
+        productos.
+      </p>
+      <ul style={{ fontSize: ".9rem", marginTop: 4 }}>
+        <li>Usuario admin: <code>admin</code></li>
+        <li>Contraseña admin: <code>1234</code></li>
+        <li>Para cliente normal: solo poné tu nombre, podés dejar la contraseña vacía.</li>
+      </ul>
 
-      <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="username">Nombre de usuario:</label>
+      <form
+        onSubmit={handleSubmit}
+        style={{ marginTop: 16, display: "grid", gap: 12 }}
+      >
+        {error && <div className="alert error">{error}</div>}
+
+        <label>
+          Nombre de usuario
           <input
-            id="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            style={{ marginLeft: "0.5rem" }}
+            placeholder="Ej: Mica"
           />
-        </div>
+        </label>
 
-        <button type="submit">Iniciar sesión</button>
+        <label>
+          Contraseña (solo si es admin)
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Solo para admin: 1234"
+          />
+        </label>
+
+        <button type="submit" className="btn btn-primary">
+          Iniciar sesión
+        </button>
       </form>
     </section>
   );
 }
-
-export default LoginPage;

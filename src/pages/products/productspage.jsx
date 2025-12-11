@@ -1,75 +1,65 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./products.css";
+
 import ProductCard from "./productcard.jsx";
+import { useProducts } from "../../components/products/productscontext.jsx"; // 👈 Ahora usamos el contexto
 
 export default function ProductsPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 👇 leer la query ?q= al primer render
+  // -------------------------------
+  // 🔎 1) Buscar en URL (?q= )
+  // -------------------------------
   const params = new URLSearchParams(location.search);
   const initialQ = params.get("q") || "";
 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // 👇 q arranca desde la URL
   const [q, setQ] = useState(initialQ);
   const [cat, setCat] = useState("todas");
 
-  // 👇 si cambia la URL (por un click en una tag), sincronizamos q
+  // Sincronizar búsqueda cuando cambia la URL
   useEffect(() => {
     const p = new URLSearchParams(location.search);
     const qFromUrl = p.get("q") || "";
     setQ(qFromUrl);
   }, [location.search]);
 
-  // 👇 cuando el usuario tipea, actualizamos la URL
   const handleSearchChange = (e) => {
     const next = e.target.value;
     setQ(next);
+
     const search = next ? `?q=${encodeURIComponent(next)}` : "";
     navigate({ pathname: "/productos", search }, { replace: true });
   };
 
-  // 👇 cargar productos
-  useEffect(() => {
-    const ac = new AbortController();
-    (async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch("/data/products.json", { signal: ac.signal });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (!Array.isArray(data) || data.length === 0) throw new Error("JSON vacío");
-        setItems(data);
-      } catch (err) {
-        setError("No se pudieron cargar los productos.");
-        setItems([]);
-      } finally {
-        setLoading(false);
-      }
-    })();
-    return () => ac.abort();
-  }, []);
+  // -------------------------------
+  // 📦 2) Obtener productos del Context (MockAPI)
+  // -------------------------------
+  const {
+    products,
+    loadingProducts,
+    errorProducts,
+  } = useProducts();
 
-  // 👇 filtrar productos (ahora busca en título, descripción, tags y categoría)
+  // -------------------------------
+  // 🔍 3) Filtros (texto + categoría)
+  // -------------------------------
   const filtered = useMemo(() => {
     const qn = q.trim().toLowerCase();
 
-    return items.filter((p) => {
+    return products.filter((p) => {
       const title = (p.title || "").toLowerCase();
-      const desc  = (p.description || "").toLowerCase();
-      const tags  = Array.isArray(p.tags) ? p.tags.map(t => String(t).toLowerCase()) : [];
-      const catP  = String(p.category || "").toLowerCase();
+      const desc = (p.description || "").toLowerCase();
+      const tags = Array.isArray(p.tags)
+        ? p.tags.map((t) => String(t).toLowerCase())
+        : [];
+      const catP = String(p.category || "").toLowerCase();
 
       const okQ = qn
         ? title.includes(qn) ||
           desc.includes(qn) ||
-          tags.some(t => t.includes(qn)) ||
+          tags.some((t) => t.includes(qn)) ||
           catP.includes(qn)
         : true;
 
@@ -77,12 +67,17 @@ export default function ProductsPage() {
 
       return okQ && okC;
     });
-  }, [items, q, cat]);
+  }, [products, q, cat]);
 
+  // -------------------------------
+  // 🖼️ Render
+  // -------------------------------
   return (
     <section id="productos">
+      {/* Filtros */}
       <div className="filters">
         <h4>Filtros</h4>
+
         <div>
           <label>
             Búsqueda:{" "}
@@ -94,6 +89,7 @@ export default function ProductsPage() {
             />
           </label>
         </div>
+
         <div>
           <label>
             Categoría:
@@ -115,19 +111,29 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {loading && <p>Cargando productos…</p>}
-      {!loading && error && <div className="alert error">{error}</div>}
+      {/* Estados */}
+      {loadingProducts && <p>Cargando productos…</p>}
 
+      {!loadingProducts && errorProducts && (
+        <div className="alert error">{errorProducts}</div>
+      )}
+
+      {/* Grid de productos */}
       <div className="product-grid">
         {filtered.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>
 
+      {/* Paginación (por ahora fake) */}
       <div className="pagination">
-        <button type="button" disabled>Anterior</button>
+        <button type="button" disabled>
+          Anterior
+        </button>
         <span>Página 1 de 1</span>
-        <button type="button" disabled>Siguiente</button>
+        <button type="button" disabled>
+          Siguiente
+        </button>
       </div>
     </section>
   );

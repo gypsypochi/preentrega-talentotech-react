@@ -5,14 +5,10 @@ import { useAuth } from "../auth/authcontext.jsx";
 
 export default function Sidebar() {
   const { cartCount } = useCart();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isAdmin, user, logout } = useAuth();
   const navigate = useNavigate();
 
-  function handleLoginClick() {
-    navigate("/login");
-  }
-
-  function handleLogoutClick() {
+  function handleLogout() {
     logout();
     navigate("/");
   }
@@ -55,7 +51,7 @@ export default function Sidebar() {
           Reseñas
         </NavLink>
 
-        {/* Carrito visible con badge grande */}
+        {/* Carrito */}
         <NavLink
           to="/carrito"
           className={({ isActive }) =>
@@ -70,37 +66,47 @@ export default function Sidebar() {
           </span>
           <span className="badge badge-cart">{cartCount}</span>
         </NavLink>
+
+        {/* 🔐 Link al panel admin SOLO si es admin */}
+        {isAdmin && (
+          <NavLink
+            to="/admin/productos"
+            className={({ isActive }) =>
+              "side-link" + (isActive ? " active" : "")
+            }
+          >
+            Panel admin
+          </NavLink>
+        )}
       </nav>
 
-      {/* Bloque Login / Logout */}
-      <div className="auth-block">
+      {/* Zona inferior: login / logout */}
+      <div style={{ marginTop: "auto" }}>
+        <hr style={{ border: "none", borderTop: "1px solid #ffffff40", margin: "16px 4px" }} />
+
         {isAuthenticated ? (
-          <>
-            <p className="auth-greeting">
-              👋 Hola <strong>{user.username}</strong>
-            </p>
-            <button
-              type="button"
-              className="auth-button auth-button--logout"
-              onClick={handleLogoutClick}
-            >
-              Cerrar sesión
-            </button>
-          </>
-        ) : (
           <button
             type="button"
-            className="auth-button auth-button--login"
-            onClick={handleLoginClick}
+            className="side-link"
+            onClick={handleLogout}
+            style={{ width: "100%", textAlign: "left" }}
+          >
+            Cerrar sesión {user?.username && `(${user.username})`}
+          </button>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              "side-link" + (isActive ? " active" : "")
+            }
           >
             🔐 Iniciar sesión
-          </button>
+          </NavLink>
         )}
-      </div>
 
-      {/* Pie simple */}
-      <div className="mini-footer">
-        © 2025 Tienda. Todos los derechos reservados.
+        <div className="mini-footer">
+          © 2025 Tienda. Todos los derechos reservados.
+        </div>
       </div>
     </aside>
   );

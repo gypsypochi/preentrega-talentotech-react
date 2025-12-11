@@ -1,40 +1,45 @@
-// src/components/auth/authcontext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 
-// 1) Crear el contexto
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
-// 2) Crear el Provider (envolverá a toda la app)
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);          // guarda el usuario
-  const [loading, setLoading] = useState(true);    // mientras lee localStorage
-
-  // 3) Al iniciar la app, leer localStorage
-  useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem("authUser");
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
     }
-    setLoading(false);
-  }, []);
+  });
 
-  // 4) Función para login simulado
-  function login(username) {
-    const userData = { username }; // podrías agregar más datos
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+  // sincronizar con localStorage
+  useEffect(() => {
+    try {
+      if (user) {
+        localStorage.setItem("authUser", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("authUser");
+      }
+    } catch {
+      // ignoramos errores de storage
+    }
+  }, [user]);
+
+  // 👇 AHORA login ACEPTA isAdmin
+  function login(username, isAdmin = false) {
+    const cleanName = username.trim() || "Invitado";
+    const newUser = { username: cleanName, isAdmin };
+    setUser(newUser);
   }
 
-  // 5) Función para logout
   function logout() {
     setUser(null);
-    localStorage.removeItem("user");
   }
 
   const value = {
     user,
-    isAuthenticated: !!user, // true si hay usuario, false si no
-    loading,
+    isAuthenticated: !!user,
+    isAdmin: !!user?.isAdmin,
     login,
     logout,
   };
@@ -42,8 +47,10 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// 6) Hook para usar el contexto más fácil
 export function useAuth() {
-  return useContext(AuthContext);
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth debe usarse dentro de AuthProvider");
+  }
+  return ctx;
 }
-

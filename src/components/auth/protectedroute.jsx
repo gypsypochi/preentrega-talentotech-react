@@ -1,22 +1,19 @@
-// src/components/auth/protectedroute.jsx
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./authcontext.jsx";
 
-function ProtectedRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth();
+export default function ProtectedRoute({ children, requireAdmin = false }) {
+  const { isAuthenticated, isAdmin } = useAuth();
+  const location = useLocation();
 
-  // Mientras está cargando (leyendo localStorage)
-  if (loading) {
-    return <p>Cargando...</p>;
-  }
-
-  // Si NO está autenticado, lo mando a /login
+  // si NO está logueado → al login
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  // Si está autenticado, muestro el contenido
+  // si la ruta exige admin y no lo es → a inicio
+  if (requireAdmin && !isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 }
-
-export default ProtectedRoute;

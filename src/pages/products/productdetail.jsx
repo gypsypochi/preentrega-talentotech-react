@@ -1,6 +1,7 @@
 // src/pages/products/productdetail.jsx
-import { useEffect, useState, useMemo } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useProducts } from "../../components/products/productscontext.jsx";
 import { useCart } from "../../components/cart/cartcontext.jsx";
 import "./products.css";
 
@@ -8,54 +9,40 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { addToCart } = useCart();
 
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // ✅ USAMOS EL CONTEXT REAL
+  const { products, fetchProducts, loading, error } = useProducts();
 
+  // si no hay productos cargados, los traemos
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch("/data/products.json");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        if (!cancelled) setItems(Array.isArray(data) ? data : []);
-      } catch {
-        if (!cancelled) {
-          setError("No se pudo cargar este producto.");
-          setItems([]);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => { cancelled = true; };
+    if (!products.length) {
+      fetchProducts();
+    }
   }, []);
 
-  const product = useMemo(
-    () => items.find((p) => String(p.id) === String(id)),
-    [items, id]
-  );
+  // encontrar producto (MockAPI usa strings)
+  const product = products.find((p) => String(p.id) === String(id));
 
   if (loading) return <p>Cargando producto…</p>;
-  if (error)   return <p className="alert error">{error}</p>;
+  if (error) return <p className="alert error">{error}</p>;
+
   if (!product)
     return (
       <section className="product-detail">
         <div className="detail-wrap">
           <p>Producto no encontrado.</p>
-          <Link to="/productos" className="back-link">← Volver a productos</Link>
+          <Link to="/productos" className="back-link">
+            ← Volver a productos
+          </Link>
         </div>
       </section>
     );
 
+  // normalizamos
   const normalized = {
     id: String(product.id),
     title: product.title || product.name || "Producto",
     price: Number(product.price ?? 0),
-    image: product.image || product.img || product.thumbnail || "",
+    image: product.image || "",
     description: product.description || "",
     tags: Array.isArray(product.tags) ? product.tags : [],
     category: String(product.category ?? "otros").toLowerCase(),
@@ -64,7 +51,9 @@ export default function ProductDetail() {
   return (
     <section className="product-detail">
       <div className="detail-wrap">
-        <Link to="/productos" className="back-link">← Volver a productos</Link>
+        <Link to="/productos" className="back-link">
+          ← Volver a productos
+        </Link>
 
         <div className="detail-layout">
           <div className="detail-image">
@@ -75,26 +64,25 @@ export default function ProductDetail() {
 
           <div className="detail-info">
             <h2>{normalized.title}</h2>
-            <p className="price">${normalized.price.toFixed(2)}</p>
+            <p className="price">${normalized.price}</p>
 
             {normalized.description && (
               <p className="description">{normalized.description}</p>
             )}
 
             {normalized.tags.length > 0 && (
-            <div className="tags">
+              <div className="tags">
                 {normalized.tags.map((t) => (
-                <Link
+                  <Link
                     key={t}
                     to={`/productos?q=${encodeURIComponent(t)}`}
                     className="tag"
-                >
+                  >
                     {t}
-                </Link>
+                  </Link>
                 ))}
-            </div>
+              </div>
             )}
-
 
             <div className="actions">
               <button

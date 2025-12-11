@@ -9,10 +9,9 @@ import ReviewsPage from "./pages/reviews/reviewspage";
 import CartPanel from "./components/cart/cartpanel.jsx";
 import ProductDetail from "./pages/products/productdetail.jsx";
 import CheckoutPage from "./components/cart/checkoutpage.jsx";
-
-// 🔐 Auth
 import LoginPage from "./pages/login/loginpage.jsx";
 import ProtectedRoute from "./components/auth/protectedroute.jsx";
+import ProductAdminPage from "./pages/products/productadminpage.jsx";
 
 function App() {
   return (
@@ -39,6 +38,19 @@ function App() {
             </Main>
           }
         />
+
+        {/* 🛠 Admin de productos (CRUD) – protegida */}
+        <Route
+  path="/admin/productos"
+  element={
+    <ProtectedRoute requireAdmin>
+      <Main title="Administrar productos">
+        <ProductAdminPage />
+      </Main>
+    </ProtectedRoute>
+  }
+/>
+
 
         {/* Producto individual */}
         <Route
