@@ -13,123 +13,116 @@ import LoginPage from "./pages/login/loginpage.jsx";
 import ProtectedRoute from "./components/auth/protectedroute.jsx";
 import ProductAdminPage from "./pages/products/productadminpage.jsx";
 
-// 🟢 Toastify
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// 🟢 HelmetProvider para SEO
-import { HelmetProvider } from "react-helmet-async";
-
 function App() {
   return (
-    <HelmetProvider>
-      <>
-        <div className="app-shell">
-          <Sidebar />
+    <>
+      <div className="app-shell">
+        <Sidebar />
 
-          <Routes>
-            {/* Inicio */}
-            <Route
-              path="/"
-              element={
-                <Main title="Inicio">
-                  <HomePage />
+        <Routes>
+          {/* Inicio */}
+          <Route
+            path="/"
+            element={
+              <Main title="Inicio">
+                <HomePage />
+              </Main>
+            }
+          />
+
+          {/* Productos */}
+          <Route
+            path="/productos"
+            element={
+              <Main title="Productos">
+                <ProductsPage />
+              </Main>
+            }
+          />
+
+          {/* Admin productos */}
+          <Route
+            path="/admin/productos"
+            element={
+              <ProtectedRoute requireAdmin>
+                <Main title="Administrar productos">
+                  <ProductAdminPage />
                 </Main>
-              }
-            />
+              </ProtectedRoute>
+            }
+          />
 
-            {/* Productos */}
-            <Route
-              path="/productos"
-              element={
-                <Main title="Productos">
-                  <ProductsPage />
+          {/* Producto individual */}
+          <Route
+            path="/producto/:id"
+            element={
+              <Main title="Producto">
+                <ProductDetail />
+              </Main>
+            }
+          />
+
+          {/* Reseñas */}
+          <Route
+            path="/reseñas"
+            element={
+              <Main title="Reseñas">
+                <ReviewsPage />
+              </Main>
+            }
+          />
+
+          {/* Carrito */}
+          <Route
+            path="/carrito"
+            element={
+              <Main title="Carrito">
+                <CartPanel />
+              </Main>
+            }
+          />
+
+          {/* Checkout */}
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Main title="Checkout">
+                  <CheckoutPage />
                 </Main>
-              }
-            />
+              </ProtectedRoute>
+            }
+          />
 
-            {/* Admin productos */}
-            <Route
-              path="/admin/productos"
-              element={
-                <ProtectedRoute requireAdmin>
-                  <Main title="Administrar productos">
-                    <ProductAdminPage />
-                  </Main>
-                </ProtectedRoute>
-              }
-            />
+          {/* Login */}
+          <Route
+            path="/login"
+            element={
+              <Main title="Iniciar sesión">
+                <LoginPage />
+              </Main>
+            }
+          />
 
-            {/* Producto individual */}
-            <Route
-              path="/producto/:id"
-              element={
-                <Main title="Producto">
-                  <ProductDetail />
-                </Main>
-              }
-            />
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
 
-            {/* Reseñas */}
-            <Route
-              path="/reseñas"
-              element={
-                <Main title="Reseñas">
-                  <ReviewsPage />
-                </Main>
-              }
-            />
-
-            {/* Carrito */}
-            <Route
-              path="/carrito"
-              element={
-                <Main title="Carrito">
-                  <CartPanel />
-                </Main>
-              }
-            />
-
-            {/* Checkout */}
-            <Route
-              path="/checkout"
-              element={
-                <ProtectedRoute>
-                  <Main title="Checkout">
-                    <CheckoutPage />
-                  </Main>
-                </ProtectedRoute>
-              }
-            />
-
-            {/* Login */}
-            <Route
-              path="/login"
-              element={
-                <Main title="Iniciar sesión">
-                  <LoginPage />
-                </Main>
-              }
-            />
-
-            {/* 404 */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-
-        {/* Toasts globales */}
-        <ToastContainer
-          position="bottom-right"
-          autoClose={2200}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          pauseOnHover
-          draggable
-          theme="colored"
-        />
-      </>
-    </HelmetProvider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2200}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
+    </>
   );
 }
 

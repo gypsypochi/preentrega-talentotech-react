@@ -3,16 +3,8 @@ import { useState } from "react";
 import "./reviews.css";
 import reviewsRaw from "../../data/reviews.json";
 
-// SEO
-import { Helmet } from "react-helmet-async";
-
-// styled-components
 import styled from "styled-components";
-
-// React Icons
 import { FiMessageCircle, FiSend } from "react-icons/fi";
-
-// Toastify
 import { toast } from "react-toastify";
 
 // 🟣 styled-components
@@ -161,19 +153,10 @@ export default function ReviewsPage() {
 
   return (
     <ReviewsSection aria-labelledby="reviews-title">
-      {/* SEO con Helmet */}
-      <Helmet>
-        <title>Reseñas – Tienda de Stickers</title>
-        <meta
-          name="description"
-          content="Opiniones y experiencias de quienes ya compraron en la Tienda de Stickers. Reseñas reales de productos kawaii y personalizados."
-        />
-      </Helmet>
-
       <div className="container reviews">
         <h2 id="reviews-title">Reseñas de la tienda</h2>
 
-        {/* Grilla con Bootstrap + styled-components */}
+        {/* Grilla Bootstrap + styled-components */}
         <div className="row g-3" role="list">
           {reviews.length === 0 ? (
             <div className="col-12" role="status" aria-live="polite">
