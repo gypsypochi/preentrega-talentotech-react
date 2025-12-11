@@ -5,8 +5,12 @@ import App from "./App.jsx";
 
 import { CartProvider } from "./components/cart/cartcontext.jsx";
 import { AuthProvider } from "./components/auth/authcontext.jsx";
-import { ProductsProvider } from "./components/products/productscontext.jsx"; // 👈 NUEVO
+import { ProductsProvider } from "./components/products/productscontext.jsx";
 
+// 👉 Bootstrap primero
+import "bootstrap/dist/css/bootstrap.min.css";
+
+// 👉 Tus estilos después (pueden sobreescribir Bootstrap)
 import "./styles/styles.css";
 import "./components/layout/layout.css";
 
@@ -14,7 +18,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <ProductsProvider>     {/* 👈 ahora toda la app conoce los productos */}
+        <ProductsProvider>
           <CartProvider>
             <App />
           </CartProvider>

@@ -1,7 +1,8 @@
 // src/pages/products/productadminpage.jsx
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useProducts } from "../../components/products/productscontext.jsx";
 import "./products.css";
+import { toast } from "react-toastify"; // 👈 NUEVO
 
 export default function ProductAdminPage() {
   const {
@@ -29,20 +30,6 @@ export default function ProductAdminPage() {
     "osos",
     "otros",
   ];
-
-  // ⭐ MENSAJES CON ANIMACIÓN
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-
-  useEffect(() => {
-    if (successMsg || errorMsg) {
-      const t = setTimeout(() => {
-        setSuccessMsg("");
-        setErrorMsg("");
-      }, 2500);
-      return () => clearTimeout(t);
-    }
-  }, [successMsg, errorMsg]);
 
   // ⭐ TAGS EXISTENTES PARA AUTOCOMPLETE
   const existingTags = useMemo(() => {
@@ -81,15 +68,15 @@ export default function ProductAdminPage() {
 
   function validate(data) {
     if (!data.title.trim()) {
-      setErrorMsg("El nombre es obligatorio.");
+      toast.error("El nombre es obligatorio.");
       return false;
     }
     if (Number(data.price) <= 0) {
-      setErrorMsg("El precio debe ser mayor a 0.");
+      toast.error("El precio debe ser mayor a 0.");
       return false;
     }
     if (data.description.trim().length < 10) {
-      setErrorMsg("La descripción debe tener al menos 10 caracteres.");
+      toast.error("La descripción debe tener al menos 10 caracteres.");
       return false;
     }
     return true;
@@ -108,20 +95,29 @@ export default function ProductAdminPage() {
 
     let ok = false;
 
-    if (editingId) {
-      ok = await updateProduct(editingId, payload);
-      if (ok !== false) setSuccessMsg("Producto actualizado ✔");
-    } else {
-      ok = await createProduct(payload);
-      if (ok !== false) setSuccessMsg("Producto creado 🎉");
-    }
+    try {
+      if (editingId) {
+        ok = await updateProduct(editingId, payload);
+        if (ok !== false) {
+          toast.success("Producto actualizado ✔");
+        }
+      } else {
+        ok = await createProduct(payload);
+        if (ok !== false) {
+          toast.success("Producto creado 🎉");
+        }
+      }
 
-    if (!ok) {
-      setErrorMsg("Error al guardar el producto.");
-      return;
-    }
+      if (!ok) {
+        toast.error("Error al guardar el producto.");
+        return;
+      }
 
-    resetForm();
+      resetForm();
+    } catch (err) {
+      console.error(err);
+      toast.error("Ocurrió un error inesperado al guardar.");
+    }
   }
 
   // ⭐ EDITAR (scroll incluido)
@@ -148,10 +144,17 @@ export default function ProductAdminPage() {
   async function handleDelete(id) {
     if (!confirm("¿Eliminar este producto?")) return;
 
-    const ok = await deleteProduct(id);
-
-    if (!ok) setErrorMsg("No se pudo eliminar.");
-    else setSuccessMsg("Producto eliminado 🗑️");
+    try {
+      const ok = await deleteProduct(id);
+      if (!ok) {
+        toast.error("No se pudo eliminar el producto.");
+      } else {
+        toast.success("Producto eliminado 🗑️");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Ocurrió un error al eliminar el producto.");
+    }
   }
 
   // ⭐ TAGS
@@ -187,10 +190,6 @@ export default function ProductAdminPage() {
     <section className="admin-panel">
       <h2>Administrar productos</h2>
 
-      {/* ALERTAS ANIMADAS */}
-      {successMsg && <p className="alert success">{successMsg}</p>}
-      {errorMsg && <p className="alert error">{errorMsg}</p>}
-
       <h3>Productos existentes</h3>
 
       {loading && <p>Cargando productos...</p>}
@@ -205,7 +204,9 @@ export default function ProductAdminPage() {
               <p className="price">${prettyPrice(p.price)}</p>
 
               {p.category && (
-                <p className="category">Categoría: {prettyCategory(p.category)}</p>
+                <p className="category">
+                  Categoría: {prettyCategory(p.category)}
+                </p>
               )}
 
               {p.description && (
@@ -218,10 +219,16 @@ export default function ProductAdminPage() {
             </div>
 
             <div className="admin-product-actions">
-              <button className="btn btn-primary" onClick={() => handleEdit(p)}>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleEdit(p)}
+              >
                 Editar
               </button>
-              <button className="btn btn-secondary" onClick={() => handleDelete(p.id)}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => handleDelete(p.id)}
+              >
                 Eliminar
               </button>
             </div>
@@ -237,14 +244,18 @@ export default function ProductAdminPage() {
           type="text"
           placeholder="Nombre"
           value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, title: e.target.value })
+          }
         />
 
         <input
           type="text"
           placeholder="Precio"
           value={
-            formData.price ? `$${Number(formData.price).toLocaleString("es-AR")}` : ""
+            formData.price
+              ? `$${Number(formData.price).toLocaleString("es-AR")}`
+              : ""
           }
           onChange={(e) => {
             const raw = e.target.value.replace(/\D/g, "");
@@ -270,7 +281,9 @@ export default function ProductAdminPage() {
           type="text"
           placeholder="URL de imagen"
           value={formData.image}
-          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, image: e.target.value })
+          }
         />
 
         <textarea
@@ -295,7 +308,11 @@ export default function ProductAdminPage() {
                 e.key === "Enter" && (e.preventDefault(), addTagFromInput())
               }
             />
-            <button type="button" className="btn btn-primary" onClick={addTagFromInput}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={addTagFromInput}
+            >
               +
             </button>
           </div>
@@ -318,7 +335,10 @@ export default function ProductAdminPage() {
                   type="button"
                   key={t}
                   onClick={() =>
-                    setFormData({ ...formData, tags: [...formData.tags, t] })
+                    setFormData({
+                      ...formData,
+                      tags: [...formData.tags, t],
+                    })
                   }
                 >
                   {t}
@@ -334,7 +354,11 @@ export default function ProductAdminPage() {
           </button>
 
           {editingId && (
-            <button type="button" className="btn btn-secondary" onClick={resetForm}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={resetForm}
+            >
               Cancelar edición
             </button>
           )}

@@ -160,6 +160,22 @@
   transform: translateY(1px);
 }
 
+/* Botón "Agregar" con iconito */
+.add-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+/* Icono dentro del botón "Agregar" */
+.add-cart-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
 /* =========== Paginación simple =========== */
 
 .pagination {
@@ -205,26 +221,6 @@
 
 .btn-secondary {
   background: var(--color-primario);
-}
-
-/* =========== Responsive grilla =========== */
-
-@media (min-width: 1200px) {
-  .product-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 999px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 560px) {
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* =========== Detalle de producto =========== */
@@ -416,37 +412,6 @@
   gap: 0.5rem;
 }
 
-.alert {
-  padding: 0.5rem 0.625rem;
-  border-radius: 0.625rem;
-  font-size: 0.9rem;
-  margin: 0.25rem 0 0;
-}
-
-.alert.error {
-  background: var(--color-acento-rosa);
-  color: var(--color-primario);
-  border: 0.0625rem solid var(--color-acento-rosa-hover);
-}
-
-.alert.success {
-  background: var(--color-verde-brillante);
-  color: var(--color-footer);
-  border: 0.0625rem solid var(--color-verde);
-}
-
-@media (max-width: 37.5rem) {
-  .admin-product-item {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .admin-product-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-}
-
 /* ===================== TAG EDITOR (ADMIN) ===================== */
 
 .tag-editor {
@@ -535,4 +500,16 @@
 /* cuando desaparecen */
 .alert.hidden {
   opacity: 0;
+}
+
+@media (max-width: 37.5rem) {
+  .admin-product-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-product-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
 }

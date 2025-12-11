@@ -1,6 +1,6 @@
 import { useCart } from "../../components/cart/cartcontext.jsx";
-// 👇 NUEVO
 import { Link } from "react-router-dom";
+import { FiShoppingCart } from "react-icons/fi";  // 👈 NUEVO
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
@@ -14,22 +14,26 @@ export default function ProductCard({ product }) {
 
   return (
     <article className="product-card">
-      {normalized.image && <img src={normalized.image} alt={normalized.title} />}
+      {normalized.image && (
+        <img src={normalized.image} alt={normalized.title} />
+      )}
       <h3>{normalized.title}</h3>
-      <p><strong>${normalized.price.toFixed(2)}</strong></p>
+      <p>
+        <strong>${normalized.price.toFixed(2)}</strong>
+      </p>
 
       <div className="card-actions">
-        {/* 👇 Cambiamos el botón por Link */}
         <Link to={`/producto/${normalized.id}`} className="btn">
           Ver más
         </Link>
 
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary add-cart-btn"     // 👈 agregamos una clase extra
           onClick={() => addToCart(normalized)}
         >
-          Agregar al carrito
+          <FiShoppingCart aria-hidden="true" />
+          <span>Agregar</span>
         </button>
       </div>
     </article>

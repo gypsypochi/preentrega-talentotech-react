@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./products.css";
 
 import ProductCard from "./productcard.jsx";
-import { useProducts } from "../../components/products/productscontext.jsx"; // 👈 Ahora usamos el contexto
+import { useProducts } from "../../components/products/productscontext.jsx";
 
 export default function ProductsPage() {
   const location = useLocation();
@@ -18,7 +18,7 @@ export default function ProductsPage() {
   const [q, setQ] = useState(initialQ);
   const [cat, setCat] = useState("todas");
 
-  // Sincronizar búsqueda cuando cambia la URL
+  // Cuando cambia la URL, sincronizamos búsqueda
   useEffect(() => {
     const p = new URLSearchParams(location.search);
     const qFromUrl = p.get("q") || "";
@@ -34,13 +34,9 @@ export default function ProductsPage() {
   };
 
   // -------------------------------
-  // 📦 2) Obtener productos del Context (MockAPI)
+  // 📦 2) Obtener productos desde el contexto
   // -------------------------------
-  const {
-    products,
-    loadingProducts,
-    errorProducts,
-  } = useProducts();
+  const { products, loadingProducts, errorProducts } = useProducts();
 
   // -------------------------------
   // 🔍 3) Filtros (texto + categoría)
@@ -68,6 +64,30 @@ export default function ProductsPage() {
       return okQ && okC;
     });
   }, [products, q, cat]);
+
+  // -------------------------------
+  // 📄 4) Paginación REAL
+  // -------------------------------
+  const [page, setPage] = useState(1);
+  const pageSize = 4; // 👈 MOSTRAR 4 PRODUCTOS POR PÁGINA
+
+  const totalPages = Math.ceil(filtered.length / pageSize);
+
+  // Si cambian filtros, reseteamos a la página 1
+  useEffect(() => {
+    setPage(1);
+  }, [q, cat]);
+
+  // Si la página queda fuera del rango, la corregimos
+  useEffect(() => {
+    if (page > totalPages) setPage(1);
+  }, [totalPages]);
+
+  // Cortamos los productos según la página actual
+  const paginated = useMemo(() => {
+    const start = (page - 1) * pageSize;
+    return filtered.slice(start, start + pageSize);
+  }, [filtered, page, pageSize]);
 
   // -------------------------------
   // 🖼️ Render
@@ -120,18 +140,30 @@ export default function ProductsPage() {
 
       {/* Grid de productos */}
       <div className="product-grid">
-        {filtered.map((p) => (
+        {paginated.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}
       </div>
 
-      {/* Paginación (por ahora fake) */}
+      {/* Paginación */}
       <div className="pagination">
-        <button type="button" disabled>
+        <button
+          type="button"
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+        >
           Anterior
         </button>
-        <span>Página 1 de 1</span>
-        <button type="button" disabled>
+
+        <span>
+          Página {totalPages === 0 ? 0 : page} de {totalPages}
+        </span>
+
+        <button
+          type="button"
+          disabled={page === totalPages || totalPages === 0}
+          onClick={() => setPage(page + 1)}
+        >
           Siguiente
         </button>
       </div>
