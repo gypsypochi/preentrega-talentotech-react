@@ -1,6 +1,5 @@
 /* =======================================================
-   LAYOUT (Sidebar + Contenido)
-   Usa solo variables de :root
+   LAYOUT (Sidebar + Contenido
    ======================================================= */
 
 /* (opcional, asegura que el body no scrollee) */
@@ -236,14 +235,47 @@ html, body { height: 100%; overflow: hidden; }
 /* =======================================================
    Responsive tweaks
    ======================================================= */
+
+/* En pantallas chicas: sidebar arriba, contenido abajo */
 @media (max-width: 900px){
-  .app-shell{ grid-template-columns: 230px 1fr; }
+  /* Permitimos scroll normal en la página */
+  html, body{
+    height: auto;
+    overflow: auto;
+  }
+
+  .app-shell{
+    grid-template-columns: 1fr;          /* UNA sola columna */
+    grid-template-rows: auto 1fr;        /* fila 1: sidebar, fila 2: main */
+    height: auto;
+  }
+
+  .sidebar{
+    height: auto;                        /* ya no ocupa todo el alto */
+    border-right: none;
+    border-bottom: 2px solid var(--color-azul-claro);
+    padding: 16px 14px;
+  }
+
+  .main{
+    height: auto;                        /* que crezca según contenido */
+    max-width: 100%;
+    padding: 18px 16px 24px;
+    overflow-y: visible;                 /* scroll de la página, no interno */
+  }
 }
-@media (max-width: 680px){
-  .app-shell{ grid-template-columns: 210px 1fr; }
-  .main{ padding: 22px 20px; }
-}
+
+/* Extra: móviles bien chiquitos */
 @media (max-width: 560px){
-  .app-shell{ grid-template-columns: 200px 1fr; }
-  .main{ padding: 18px 16px; }
+  .sidebar{
+    padding: 12px 10px;
+  }
+
+  .main{
+    padding: 14px 12px 20px;
+  }
+
+  .main .page-title{
+    font-size: 1.6rem;
+  }
 }
